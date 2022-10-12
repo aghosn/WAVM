@@ -1,3 +1,4 @@
+#include <WAVM/RuntimeABI/RuntimeABI.h>
 #include <memory>
 #include <utility>
 #include "RuntimePrivate.h"
@@ -631,4 +632,10 @@ Runtime::ExceptionType* Runtime::getTypedInstanceExport(const Instance* instance
 const std::vector<Object*>& Runtime::getInstanceExports(const Instance* instance)
 {
 	return instance->exports;
+}
+
+std::shared_ptr<LLVMJIT::Module> Runtime::accessJitModule(const Instance* instance)
+{
+	WAVM_ASSERT(instance);
+	return instance->jitModule;
 }

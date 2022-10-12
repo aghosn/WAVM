@@ -229,4 +229,31 @@ namespace WAVM { namespace Runtime {
 			reinterpret_cast<Uptr>(contextRuntimeData)
 			& -(Iptr(1) << compartmentRuntimeDataAlignmentLog2));
 	}
+
+	// Access Rights for a section.
+	namespace AccessRights {
+		typedef uint32_t AR_t;
+		const AR_t AR_R = 1 << 0;
+		const AR_t AR_W = 1 << 1;
+		const AR_t AR_X = 1 << 2;
+
+		enum SectionType
+		{
+			Read = 1,
+			ReadWrite = 2,
+			Execute = 3,
+		};
+	}
+
+	// Access information about a section.
+	struct SectionInfo
+	{
+		uint64_t base;
+		size_t nb_pages;
+		AccessRights::AR_t access;
+	};
+
+	int getMemorySection(LLVMJIT::Module* module,
+						 AccessRights::SectionType stype,
+						 SectionInfo* info);
 }}

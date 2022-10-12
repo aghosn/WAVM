@@ -412,6 +412,8 @@ namespace WAVM { namespace LLVMJIT {
 		std::vector<U8> objectBytes;
 		std::unique_ptr<llvm::object::ObjectFile> object;
 #endif
+	public:
+		ModuleMemoryManager* getMemoryManager() { return memoryManager; }
 	};
 
 	extern std::unique_ptr<llvm::TargetMachine> getTargetMachine(const TargetSpec& targetSpec);

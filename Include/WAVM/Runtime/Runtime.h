@@ -8,6 +8,7 @@
 #include "WAVM/IR/Value.h"
 #include "WAVM/Inline/Assert.h"
 #include "WAVM/Inline/BasicTypes.h"
+#include "WAVM/LLVMJIT/LLVMJIT.h"
 #include "WAVM/Platform/Diagnostics.h"
 
 // Declare some types to avoid including the full definition.
@@ -502,6 +503,8 @@ namespace WAVM { namespace Runtime {
 	// Gets an array of the objects exported by an instance. The array indices correspond to the
 	// IR::Module::exports array.
 	WAVM_API const std::vector<Object*>& getInstanceExports(const Instance* instance);
+
+	WAVM_API std::shared_ptr<LLVMJIT::Module> accessJitModule(const Instance* instance);
 
 	//
 	// Compartments

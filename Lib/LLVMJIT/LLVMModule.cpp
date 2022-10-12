@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <string>
@@ -249,6 +250,14 @@ struct LLVMJIT::ModuleMemoryManager : llvm::RTDyldMemoryManager
 	{
 		return sectionNameToContentsMap;
 	}
+
+	// @aghosn adding accessors.
+	U8* getCodeSectionBase() { return codeSection.baseAddress; }
+	Uptr getCodeSectionNumPages() { return codeSection.numPages; }
+	U8* getReadOnlySectionBase() { return readOnlySection.baseAddress; }
+	Uptr getReadOnlySectionNumPages() { return readOnlySection.numPages; }
+	U8* getReadWriteSectionBase() { return readWriteSection.baseAddress; }
+	Uptr getReadWriteSectionNumPages() { return readWriteSection.numPages; }
 
 private:
 	struct Section
@@ -829,4 +838,32 @@ bool LLVMJIT::getInstructionSourceByAddress(Uptr address, InstructionSource& out
 	outSource.instructionIndex = opIndex > 0 ? Uptr(opIndex) : 0;
 	return true;
 #endif
+}
+
+int Runtime::getMemorySection(LLVMJIT::Module* module,
+							  Runtime::AccessRights::SectionType stype,
+							  Runtime::SectionInfo* info)
+{
+	auto* manager = module->getMemoryManager();
+	WAVM_ASSERT(manager);
+	switch(stype)
+	{
+	case Runtime::AccessRights::SectionType::Read:
+		info->access = Runtime::AccessRights::AR_R;
+		info->base = (uint64_t)manager->getReadOnlySectionBase();
+		info->nb_pages = (size_t)manager->getReadOnlySectionNumPages();
+		break;
+	case Runtime::AccessRights::SectionType::ReadWrite:
+		info->access = Runtime::AccessRights::AR_R | Runtime::AccessRights::AR_W;
+		info->base = (uint64_t)manager->getReadWriteSectionBase();
+		info->nb_pages = (size_t)manager->getReadWriteSectionNumPages();
+		break;
+	case Runtime::AccessRights::SectionType::Execute:
+		info->access = Runtime::AccessRights::AR_R | Runtime::AccessRights::AR_X;
+		info->base = (uint64_t)manager->getCodeSectionBase();
+		info->nb_pages = (size_t)manager->getCodeSectionNumPages();
+		break;
+	default: return -1;
+	}
+	return 0;
 }
