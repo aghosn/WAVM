@@ -162,8 +162,8 @@ static I32 translateVFDFlags(const VFDFlags& vfsFlags)
 			"VFDSync::contentsAndMetadataAfterWriteAndBeforeRead is not yet implemented "
 			"on Apple platforms.");
 #else
-	case VFDSync::contentsAfterWriteAndBeforeRead: flags |= O_DSYNC | O_RSYNC; break;
-	case VFDSync::contentsAndMetadataAfterWriteAndBeforeRead: flags |= O_SYNC | O_RSYNC; break;
+	case VFDSync::contentsAfterWriteAndBeforeRead: flags |= O_DSYNC ; break;
+	case VFDSync::contentsAndMetadataAfterWriteAndBeforeRead: flags |= O_SYNC; break;
 #endif
 
 	default: WAVM_UNREACHABLE();

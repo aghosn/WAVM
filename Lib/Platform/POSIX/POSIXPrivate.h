@@ -31,7 +31,8 @@ namespace WAVM { namespace Platform {
 	struct SignalContext
 	{
 		SignalContext* outerContext;
-		jmp_buf catchJump;
+		//jmp_buf catchJump;
+		sigjmp_buf catchJump;
 		bool (*filter)(void*, Signal, CallStack&&);
 		void* filterArgument;
 	};

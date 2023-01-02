@@ -160,7 +160,7 @@ static void getThreadStack(pthread_t thread, U8*& outMinGuardAddr, U8*& outMinAd
 #elif defined(__WAVIX__)
 	Errors::unimplemented("Wavix getThreadStack");
 #else
-#error unsupported platform
+//#error unsupported platform
 #endif
 }
 

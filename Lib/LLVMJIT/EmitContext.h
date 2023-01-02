@@ -1,4 +1,5 @@
 #pragma once
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 #include "LLVMJITPrivate.h"
 #include "WAVM/IR/Module.h"

@@ -829,8 +829,8 @@ EMIT_ATOMIC_STORE_OP(i64, atomic_store32, llvmContext.i32Type, 2, trunc)
 		auto pointer = coerceAddressToPointer(boundedAddress, llvmMemoryType, imm.memoryIndex);    \
 		auto atomicCmpXchg                                                                         \
 			= irBuilder.CreateAtomicCmpXchg(pointer,                                               \
-											expectedValue,                                         \
-											replacementValue,                                      \
+											expectedValue,                     \
+											replacementValue,  llvm::MaybeAlign(),                 \
 											llvm::AtomicOrdering::SequentiallyConsistent,          \
 											llvm::AtomicOrdering::SequentiallyConsistent);         \
 		atomicCmpXchg->setVolatile(true);                                                          \
@@ -864,7 +864,7 @@ EMIT_ATOMIC_CMPXCHG(i64, atomic_rmw_cmpxchg, llvmContext.i64Type, 3, identity, i
 		auto pointer = coerceAddressToPointer(boundedAddress, llvmMemoryType, imm.memoryIndex);    \
 		auto atomicRMW = irBuilder.CreateAtomicRMW(llvm::AtomicRMWInst::BinOp::rmwOpId,            \
 												   pointer,                                        \
-												   value,                                          \
+												   value, llvm::MaybeAlign(),                       \
 												   llvm::AtomicOrdering::SequentiallyConsistent);  \
 		atomicRMW->setVolatile(true);                                                              \
 		push(memToValue(atomicRMW, asLLVMType(llvmContext, ValueType::valueTypeId)));              \

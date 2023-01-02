@@ -61,6 +61,15 @@ namespace WAVM { namespace Platform {
 		{
 			Uptr data[12];
 		} pthreadCond;
+#elif defined(__FreeBSD__)
+		struct PthreadMutex
+		{
+			Uptr data[1];
+		} pthreadMutex;
+		struct PthreadCond
+		{
+			Uptr data[1];
+		} pthreadCond;
 #else
 #error unsupported platform
 #endif
