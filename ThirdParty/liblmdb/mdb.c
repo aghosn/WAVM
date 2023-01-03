@@ -177,7 +177,7 @@ typedef SSIZE_T	ssize_t;
 #elif defined(MDB_USE_SYSV_SEM)
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#ifdef _SEM_SEMUN_UNDEFINED
+#if defined(_SEM_SEMUN_UNDEFINED) || defined(__FreeBSD__)
 union semun {
 	int val;
 	struct semid_ds *buf;
